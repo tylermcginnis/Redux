@@ -28,3 +28,9 @@ html, body {
   line-height: 55px;
   font-weight: 100;
 }
+
+.errorMsg {
+  color: #FF7777;
+  font-size: 22px;
+  text-align: center;
+}
