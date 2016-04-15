@@ -4,16 +4,6 @@
     uid
     avatar
 
-/notifications
-  uid
-    notificationId
-      type
-      author
-      authorAvatar
-      uid (of author)
-      duckId
-      timestamp
-
 /ducks
   duckId
     avatar
