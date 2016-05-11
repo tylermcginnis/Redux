@@ -50,6 +50,7 @@ const developmentConfig = {
     hot: true,
     inline: true,
     progress: true,
+    stats: 'errors-only',
   },
   plugins: [HTMLWebpackPluginConfig, new webpack.HotModuleReplacementPlugin()]
 }
