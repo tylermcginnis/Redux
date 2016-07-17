@@ -68,3 +68,27 @@ html, body {
 .darkBtn:hover {
   background: #1877E6
 }
+
+.baseDuckContainer {
+  border-radius: 5px;
+  max-width: 450px;
+  margin: 15px auto;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.baseAvatar {
+  width: 75px;
+  border-radius: 3px;
+  margin-right: 15px;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+  cursor: pointer;
+}
+
+.clickable:hover {
+  transform: scale(1.1);
+}
