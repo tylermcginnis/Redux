@@ -1,21 +1,20 @@
-
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Duck } from 'components'
-import * as usersLikesAction from 'redux/modules/usersLikes'
+import * as usersLikesActions from 'redux/modules/usersLikes'
+
 const { func, object, bool, number } = PropTypes
 
 const DuckContainer = React.createClass({
   propTypes: {
     duck: object.isRequired,
-    handleClick: func,
+    numberOfLikes: number,
+    isLiked: bool.isRequired,
     hideLikeCount: bool.isRequired,
     hideReplyBtn: bool.isRequired,
-    isLiked: bool.isRequired,
-    numberOfLikes: number,
-    addAndHandleLike: func.isRequired,
     handleDeleteLike: func.isRequired,
+    addAndHandleLike: func.isRequired,
   },
   contextTypes: {
     router: PropTypes.object.isRequired,
@@ -28,11 +27,11 @@ const DuckContainer = React.createClass({
   },
   goToProfile (e) {
     e.stopPropagation()
-    this.context.router.push('/' + this.props.duck.uid)
+    this.context.router.push('/' + this.props.duck.get('uid'))
   },
   handleClick (e) {
-    e.preventDefault()
-    this.context.router.push('/duckDetail/' + this.props.duck.duckId)
+    e.stopPropagation()
+    this.context.router.push('/duckDetail/' + this.props.duck.get('duckId'))
   },
   render () {
     return (
@@ -46,7 +45,7 @@ const DuckContainer = React.createClass({
 
 function mapStateToProps ({ducks, likeCount, usersLikes}, props) {
   return {
-    duck: ducks[props.duckId],
+    duck: ducks.get(props.duckId),
     hideLikeCount: props.hideLikeCount,
     hideReplyBtn: props.hideReplyBtn,
     isLiked: usersLikes[props.duckId] === true,
@@ -54,7 +53,11 @@ function mapStateToProps ({ducks, likeCount, usersLikes}, props) {
   }
 }
 
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators(usersLikesActions, dispatch)
+}
+
 export default connect(
   mapStateToProps,
-  (dispatch) => bindActionCreators(usersLikesAction, dispatch)
+  mapDispatchToProps
 )(DuckContainer)

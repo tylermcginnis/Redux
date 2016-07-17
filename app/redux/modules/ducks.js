@@ -1,6 +1,7 @@
 import { saveDuck, fetchDuck } from 'helpers/api'
 import { closeModal } from './modal'
 import { addSingleUsersDuck } from './usersDucks'
+import { Map, fromJS } from 'immutable'
 
 const FETCHING_DUCK = 'FETCHING_DUCK'
 const FETCHING_DUCK_ERROR = 'FETCHING_DUCK_ERROR'
@@ -16,7 +17,6 @@ function fetchingDuck () {
 }
 
 function fetchingDuckError (error) {
-  console.warn(error)
   return {
     type: FETCHING_DUCK_ERROR,
     error: 'Error fetching Duck',
@@ -43,21 +43,14 @@ function addDuck (duck) {
   }
 }
 
-export function addMultipleDucks (ducks) {
-  return {
-    type: ADD_MULTIPLE_DUCKS,
-    ducks,
-  }
-}
-
 export function duckFanout (duck) {
   return function (dispatch, getState) {
     const uid = getState().users.authedId
     saveDuck(duck)
-      .then((duckWithID) => {
-        dispatch(addDuck(duckWithID))
+      .then((duckWithId) => {
+        dispatch(addDuck(duckWithId))
         dispatch(closeModal())
-        dispatch(addSingleUsersDuck(uid, duckWithID.duckId))
+        dispatch(addSingleUsersDuck(uid, duckWithId.duckId))
       })
       .catch((err) => {
         console.warn('Error in duckFanout', err)
@@ -65,8 +58,15 @@ export function duckFanout (duck) {
   }
 }
 
+export function addMultipleDucks (ducks) {
+  return {
+    type: ADD_MULTIPLE_DUCKS,
+    ducks,
+  }
+}
+
 export function fetchAndHandleDuck (duckId) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(fetchingDuck())
     fetchDuck(duckId)
       .then((duck) => dispatch(fetchingDuckSuccess(duck)))
@@ -74,43 +74,36 @@ export function fetchAndHandleDuck (duckId) {
   }
 }
 
-const initialState = {
+const initialState = Map({
   isFetching: true,
-  error: '',
-}
+  error: ''
+})
 
 export default function ducks (state = initialState, action) {
   switch (action.type) {
     case FETCHING_DUCK :
-      return {
-        ...state,
+      return state.merge({
         isFetching: true,
-      }
+      })
     case ADD_DUCK :
     case FETCHING_DUCK_SUCCESS :
-      return {
-        ...state,
+      return state.merge({
         error: '',
         isFetching: false,
         [action.duck.duckId]: action.duck,
-      }
+      })
     case FETCHING_DUCK_ERROR :
-      return {
-        ...state,
+      return state.merge({
         isFetching: false,
         error: action.error,
-      }
+      })
     case REMOVE_FETCHING :
-      return {
-        ...state,
-        error: '',
+      return state.merge({
         isFetching: false,
-      }
+        error: '',
+      })
     case ADD_MULTIPLE_DUCKS :
-      return {
-        ...state,
-        ...action.ducks,
-      }
+      return state.merge(action.ducks)
     default :
       return state
   }
