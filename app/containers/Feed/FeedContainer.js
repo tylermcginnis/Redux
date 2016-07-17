@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Feed } from 'components'
-import { bindActionCreators } from 'redux'
 import * as feedActionCreators from 'redux/modules/feed'
+import { List } from 'immutable'
 
 const FeedContainer = React.createClass({
   propTypes: {
-    duckIds: PropTypes.array.isRequired,
+    duckIds: PropTypes.instanceOf(List),
     newDucksAvailable: PropTypes.bool.isRequired,
     error: PropTypes.string.isRequired,
     isFetching: PropTypes.bool.isRequired,
@@ -19,26 +20,29 @@ const FeedContainer = React.createClass({
   render () {
     return (
       <Feed
-        duckIds={this.props.duckIds}
         newDucksAvailable={this.props.newDucksAvailable}
         error={this.props.error}
         isFetching={this.props.isFetching}
-        resetNewDucksAvailable={this.props.resetNewDucksAvailable} />
+        resetNewDucksAvailable={this.props.resetNewDucksAvailable}
+        duckIds={this.props.duckIds} />
     )
   },
 })
 
 function mapStateToProps ({feed}) {
-  const { newDucksAvailable, error, isFetching, duckIds } = feed
   return {
-    newDucksAvailable,
-    error,
-    isFetching,
-    duckIds,
+    newDucksAvailable: feed.get('newDucksAvailable'),
+    error: feed.get('error'),
+    isFetching: feed.get('isFetching'),
+    duckIds: feed.get('duckIds')
   }
+}
+
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators(feedActionCreators, dispatch)
 }
 
 export default connect(
   mapStateToProps,
-  (dispatch) => bindActionCreators(feedActionCreators, dispatch)
+  mapDispatchToProps,
 )(FeedContainer)
