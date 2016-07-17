@@ -1,0 +1,32 @@
+.avatar {
+  composes: baseAvatar from 'sharedStyles/styles.css';
+}
+
+.replyContainer {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  font-size: 18px;
+  margin: 7px;
+  padding: 15px;
+}
+
+.cushion {
+  padding: 5px 0;
+}
+
+.header {
+  text-align: center;
+  font-weight: 100;
+  font-size: 50px;
+  margin-top: 0;
+}
+
+.center {
+  composes: center from 'sharedStyles/styles.css';
+}
+
+.author {
+  composes: clickable from 'sharedStyles/styles.css';
+  font-weight: bold;
+}
