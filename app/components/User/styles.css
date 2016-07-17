@@ -1,0 +1,12 @@
+.userContainer {
+  composes: subHeader from 'sharedStyles/styles.css';
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.header {
+  composes: subHeader from 'sharedStyles/styles.css';
+}
