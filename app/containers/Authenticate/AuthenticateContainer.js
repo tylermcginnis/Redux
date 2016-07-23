@@ -7,6 +7,7 @@ import * as userActionCreators from 'redux/modules/users'
 
 const AuthenticateContainer = React.createClass({
   propTypes: {
+    authUser: PropTypes.func.isRequired,
     fetchingUser: PropTypes.func.isRequired,
     fetchingUserFailure: PropTypes.func.isRequired,
     fetchingUserSuccess: PropTypes.func.isRequired,
